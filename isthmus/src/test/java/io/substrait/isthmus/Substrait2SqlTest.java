@@ -189,4 +189,10 @@ public class Substrait2SqlTest extends PlanTestBase {
     assertSqlSubstraitRelRoundTrip(
         "select case when p_size > 100 then 'large' when p_size > 50 then 'medium' else 'small' end from part");
   }
+
+  @Test
+  public void windowTest() throws Exception {
+    assertSqlSubstraitRelRoundTrip(
+        "select sum(p_size) over (partition by p_partkey), lead(p_partkey, 1) over (partition by p_name) from part");
+  }
 }

@@ -51,6 +51,7 @@ import org.apache.calcite.rel.logical.LogicalSort;
 import org.apache.calcite.rel.logical.LogicalTableModify;
 import org.apache.calcite.rel.logical.LogicalUnion;
 import org.apache.calcite.rel.logical.LogicalValues;
+import org.apache.calcite.rel.logical.LogicalWindow;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexFieldAccess;
@@ -318,6 +319,11 @@ public class SubstraitRelVisitor extends RelNodeVisitor<Rel, RuntimeException> {
     }
 
     return builder.count(asLong(sort.fetch)).build();
+  }
+
+  @Override
+  public Rel visit(LogicalWindow window) throws RuntimeException {
+    return super.visit(window);
   }
 
   private long asLong(RexNode rex) {

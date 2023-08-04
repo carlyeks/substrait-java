@@ -12,6 +12,9 @@ import org.apache.calcite.plan.hep.HepPlanner;
 import org.apache.calcite.plan.hep.HepProgram;
 import org.apache.calcite.prepare.CalciteCatalogReader;
 import org.apache.calcite.rel.RelRoot;
+import org.apache.calcite.rel.rules.CoreRules;
+import org.apache.calcite.rel.rules.ProjectToWindowRule;
+import org.apache.calcite.rel.rules.ProjectToWindowRule.ProjectToLogicalProjectAndWindowRule;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.schema.Schema;
 import org.apache.calcite.sql.SqlNode;
@@ -125,7 +128,7 @@ public class SqlToSubstrait extends SqlConverterBase {
   static RelRoot getBestExpRelRoot(SqlToRelConverter converter, SqlNode parsed) {
     RelRoot root = converter.convertQuery(parsed, true, true);
     {
-      var program = HepProgram.builder().build();
+      var program = HepProgram.builder().addRuleInstance(CoreRules.PROJECT_TO_LOGICAL_PROJECT_AND_WINDOW).build();
       HepPlanner hepPlanner = new HepPlanner(program);
       hepPlanner.setRoot(root.rel);
       root = root.withRel(hepPlanner.findBestExp());

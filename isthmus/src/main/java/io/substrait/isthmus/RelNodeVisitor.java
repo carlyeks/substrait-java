@@ -72,6 +72,10 @@ public abstract class RelNodeVisitor<OUTPUT, EXCEPTION extends Throwable> {
     return visitOther(modify);
   }
 
+  public OUTPUT visit(LogicalWindow window) throws EXCEPTION {
+    return visitOther(window);
+  }
+
   public abstract OUTPUT visitOther(RelNode other) throws EXCEPTION;
 
   protected RelNodeVisitor() {}
@@ -113,6 +117,8 @@ public abstract class RelNodeVisitor<OUTPUT, EXCEPTION extends Throwable> {
       return this.visit(aggregate);
     } else if (node instanceof LogicalTableModify modify) {
       return this.visit(modify);
+    } else if (node instanceof LogicalWindow window) {
+      return this.visit(window);
     } else {
       return this.visitOther(node);
     }
